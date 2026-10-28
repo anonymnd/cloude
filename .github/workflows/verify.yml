@@ -1,0 +1,56 @@
+name: Verify inventory migration lab
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Generate temporary local database credentials
+        run: node -e "require('fs').writeFileSync('.env', 'POSTGRES_PASSWORD=' + require('crypto').randomBytes(32).toString('hex') + '\n')"
+
+      - name: Build and start source
+        run: docker compose -p cloud-source up -d --build --wait
+
+      - name: Verify input validation and persistence across restarts
+        run: node smoke-test.mjs
+
+      - name: Verify migration, read-only cutover, and rollback
+        run: node migrate.mjs
+
+      - name: Save migration reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: migration-reports
+          path: backups/*-report.json
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Show service state on failure
+        if: failure()
+        run: |
+          docker compose -p cloud-source ps -a
+          if [ -f .env.destination ]; then
+            docker compose --env-file .env.destination -p cloud-destination ps -a
+          fi
+
+      - name: Clean up disposable runner resources
+        if: always()
+        run: |
+          docker compose -p cloud-source down --volumes --remove-orphans
+          if [ -f .env.destination ]; then
+            docker compose --env-file .env.destination -p cloud-destination down --volumes --remove-orphans
+          fi

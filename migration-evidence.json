@@ -1,0 +1,22 @@
+{
+  "startedAt": "2026-10-28T01:23:03.016Z",
+  "checks": [
+    "Source app stopped; consistent PostgreSQL backup saved locally",
+    "Backup restored into an isolated volume; every row and identity sequence matches",
+    "Destination API serves matching records on port 8001 and rejects writes",
+    "Original URL on port 8000 now serves the read-only destination",
+    "Rollback restored the original source URL with all original data intact"
+  ],
+  "pauseStartedAt": "2026-10-28T01:23:05.875Z",
+  "recordCount": 1,
+  "dataSha256": "9fd93395ef2f090884c5dd1b83761f3c03b00eb9e3c07b782c3e197539e09b4f",
+  "backup": "backups\\2026-10-28T01-23-05.875Z-inventory.dump",
+  "backupSha256": "b536e226fa5edaaeddd3ec249b7799b1be0617129f5579bbd700b190515a85b7",
+  "cutoverAt": "2026-10-28T01:23:31.929Z",
+  "cutoverDowntimeSeconds": 26.054,
+  "rollbackStartedAt": "2026-10-28T01:23:31.929Z",
+  "rollbackCompletedAt": "2026-10-28T01:23:41.215Z",
+  "rollbackDowntimeSeconds": 9.286,
+  "status": "passed",
+  "finishedAt": "2026-10-28T01:23:41.855Z"
+}
