@@ -64,4 +64,4 @@ The workflow in `.github/workflows/verify.yml` builds the application on a dispo
 
 Its final cleanup deletes only the disposable runner's lab volumes. Do not copy that cleanup command to your local lab unless you intend to delete local data.
 
-The workflow is prepared but has not been executed on GitHub. The application and migration scripts have passed locally; a successful GitHub Actions run will provide separate evidence on Linux. No repository has been published and no cloud resources have been provisioned. Review GitHub Actions eligibility and usage limits for your account before enabling it; this project requires no paid runner.
+The [GitHub Actions run on 2026-10-28](https://github.com/anonymnd/cloude/actions/runs/40615762942) passed on a fresh Linux runner, including build, validation, persistence, migration, cutover, rollback, report upload, and cleanup. The repository is published; no cloud hosting resources have been provisioned. Review GitHub Actions eligibility and usage limits for your account; this project requires no paid runner.
